@@ -1,0 +1,54 @@
+# ========================================================
+# Sensitive Credentials & Database Configurations
+# ========================================================
+application/config/database.php
+.env
+.env.*
+
+# ========================================================
+# Server & Hosting INI Configurations
+# ========================================================
+.user.ini
+php.ini
+
+# ========================================================
+# Logs & Error Dumps
+# ========================================================
+error_log
+application/logs/*
+!application/logs/index.html
+!application/logs/.gitkeep
+
+# ========================================================
+# Cache & Temporary Files
+# ========================================================
+application/cache/*
+!application/cache/index.html
+!application/cache/.gitkeep
+/temp/
+/tmp/
+*.tmp
+*.bak
+*.swp
+
+# ========================================================
+# Operating System & IDE Files
+# ========================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ========================================================
+# Composer Dependencies (Optional / Standard)
+# Uncomment if you manage dependencies strictly via composer install:
+# /vendor/
+# ========================================================

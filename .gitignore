@@ -4,7 +4,9 @@
 application/config/database.php
 .env
 .env.*
-!.env.example
+.env.php
+.env_config/
+!.env.php.example
 
 # ========================================================
 # Server & Hosting INI Configurations

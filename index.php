@@ -38,42 +38,6 @@
 
 /*
  *---------------------------------------------------------------
- * LOAD ENVIRONMENT VARIABLES (.env)
- *---------------------------------------------------------------
- * Checks both outside public_html (../.env on cPanel) and project root (.env)
- */
-	foreach (array(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env', __DIR__ . DIRECTORY_SEPARATOR . '.env') as $_env_file)
-	{
-		if (is_file($_env_file) && is_readable($_env_file))
-		{
-			$_env_lines = file($_env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-			foreach ($_env_lines as $_line)
-			{
-				$_line = trim($_line);
-				if ($_line === '' || $_line[0] === '#' || strpos($_line, '=') === FALSE)
-				{
-					continue;
-				}
-				list($_name, $_val) = explode('=', $_line, 2);
-				$_name = trim($_name);
-				$_val = trim($_val);
-				if (strlen($_val) >= 2 && (($_val[0] === '"' && substr($_val, -1) === '"') || ($_val[0] === "'" && substr($_val, -1) === "'")))
-				{
-					$_val = substr($_val, 1, -1);
-				}
-				if ( ! array_key_exists($_name, $_SERVER) && ! array_key_exists($_name, $_ENV))
-				{
-					putenv(sprintf('%s=%s', $_name, $_val));
-					$_ENV[$_name] = $_val;
-					$_SERVER[$_name] = $_val;
-				}
-			}
-			break;
-		}
-	}
-
-/*
- *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
  *
@@ -89,7 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : (getenv('CI_ENV') !== FALSE ? getenv('CI_ENV') : 'development'));
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------

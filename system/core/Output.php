@@ -48,6 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/libraries/output.html
  */
+#[\AllowDynamicProperties]
 class CI_Output {
 
 	/**
@@ -55,7 +56,7 @@ class CI_Output {
 	 *
 	 * @var	string
 	 */
-	public $final_output;
+	public $final_output = '';
 
 	/**
 	 * Cache expiration time

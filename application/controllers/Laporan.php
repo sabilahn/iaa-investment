@@ -21,7 +21,8 @@ class Laporan extends CI_Controller
     {
         $this->load->library('cetak_pdf');
         
-        $old_limit = ini_set("memory_limit", "512M");
+        $old_limit = ini_set("memory_limit", "2048M");
+        set_time_limit(300);
         
         $this->cetak_pdf->setPaper('A4', 'landscape');
         $this->cetak_pdf->filename = $filename;
@@ -74,7 +75,7 @@ class Laporan extends CI_Controller
 
     public function cetak_saldo_awal_tahun()
     {
-        $tahun = $_POST['tahun'];
+        $tahun = $this->input->post('tahun') ?: date('Y');
         $data['title'] = 'Saldo Awal Tahun';
         
         $data['action'] = '<a class="btn" onclick="cetak()"><i class="fas fa-print"> Cetak</i></a>
@@ -178,7 +179,7 @@ class Laporan extends CI_Controller
     }
     public function cetak_transaksi_invest_bln()
     {
-        $bulan = $this->input->post('bulanTransaksi');
+        $bulan = $this->input->post('bulanTransaksi') ?: date('n');
         $nama = array(
             '1' => 'Januari',
             '2' => 'Februari',
@@ -193,7 +194,7 @@ class Laporan extends CI_Controller
             '11' => 'November',
             '12' => 'Desember'
         );
-        $tahun = $this->input->post('tahunTransaksi');
+        $tahun = $this->input->post('tahunTransaksi') ?: date('Y');
         $nama_bulan = $nama[$bulan];
         $data['title'] = 'Transaksi Investasi Bulanan';
         $data['nama_bulan'] = $nama[$bulan];
@@ -248,7 +249,7 @@ class Laporan extends CI_Controller
     }
     public function cetak_penarikan_investasi()
     {
-        $tahun = $this->input->post('tahun');
+        $tahun = $this->input->post('tahun') ?: date('Y');
 
         $data['title'] = 'Penarikan Investasi';
         $data['tahun'] = $tahun;
@@ -295,7 +296,7 @@ class Laporan extends CI_Controller
     }
     public function cetak_saldo_harian()
     {
-        $tahun = $this->input->post('tahunSaldo');
+        $tahun = $this->input->post('tahunSaldo') ?: date('Y');
         $data['title'] = 'Saldo Harian';
         $data['tahun'] = $tahun;
         $data['action'] = '<a class="btn" onclick="cetak()"><i class="fas fa-print"> Cetak</i></a>
@@ -341,7 +342,7 @@ class Laporan extends CI_Controller
     }
     public function cetak_distribusi_dan_porsi()
     {
-        $tahun = $this->input->post('tahunDisporsi');
+        $tahun = $this->input->post('tahunDisporsi') ?: date('Y');
         $data['title'] = 'Distribusi dan Porsi';
         $data['tahun'] = $tahun;
         $data['action'] = '<a class="btn" onclick="cetak()"><i class="fas fa-print"> Cetak</i></a>
@@ -390,8 +391,8 @@ class Laporan extends CI_Controller
     }
     public function cetak_bagi_hasil_shu()
     {
-        $tahun = $this->input->post('tahunBagiHasil');
-        $kec = $this->input->post('Kec');
+        $tahun = $this->input->post('tahunBagiHasil') ?: date('Y');
+        $kec = $this->input->post('Kec') ?: 'Semua';
 
         $data['title'] = 'Bagi Hasil SHU';
         $data['tahun'] = $tahun;
@@ -455,7 +456,7 @@ class Laporan extends CI_Controller
     public function cetak_label_surat()
     {
         $data['title'] = 'IAA Investment | Label';
-        $tahun = $this->input->post('tahun');
+        $tahun = $this->input->post('tahun') ?: date('Y');
         $kec = $this->input->post('Kec');
 
         $data['data_label'] = $this->LaporanModel->getData('v_label_surat', array('tahun' => $tahun, 'kec' => $kec));

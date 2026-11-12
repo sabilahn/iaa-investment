@@ -5,8 +5,6 @@
     <meta charset='UTF-8'>
     <title>Export <?= $title ?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-
-    <link rel="stylesheet" href="<?= base_url() ?>assets/stisla/vendors/fontawesome/css/all.min.css">
     <style>
         * {
             margin: 0;

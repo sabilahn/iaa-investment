@@ -6,7 +6,7 @@ require_once('header_pdf.php');
     <table width=100%; style="padding-bottom: 20px;">
         <tr>
             <td style="text-align: center;" class="no-background">
-                <h2>PENARIKAN INVESTASI <br> CV. DHARMA IAA TAHUN BUKU <?= $tahun ?></br>
+                <h2>PENARIKAN INVESTASI <br> CV. DHARMA IAA TAHUN BUKU <?= $tahun ?></h2>
             </td>
         </tr>
     </table>
@@ -33,14 +33,14 @@ require_once('header_pdf.php');
                     <td style="text-align: center"><?= $penarikan['no_rekening'] ?></td>
                     <td><?= ucwords($penarikan['nama']) ?></td>
                     <td class="tengah"><?= $penarikan['tgl_penarikan'] ?></td>
-                    <td class="kanan"><?= number_format($penarikan['jml_penarikan'], 2, ',', '.'); ?></td>
+                    <td class="kanan"><?= number_format((float) $penarikan['jml_penarikan'], 2, ',', '.'); ?></td>
                 </tr>
             <?php }
             ?>
 
             <tr>
                 <td colspan="4" class="kanan"><b>Jumlah</b></td>
-                <td class="kanan"><b><?= number_format($total_penarikan, 2, ',', '.'); ?></b></td>
+                <td class="kanan"><b><?= number_format((float) $total_penarikan, 2, ',', '.'); ?></b></td>
             </tr>
         </tbody>
     </table>

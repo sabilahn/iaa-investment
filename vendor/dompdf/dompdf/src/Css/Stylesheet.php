@@ -310,7 +310,7 @@ class Stylesheet
      * @param Style $parent The style of this style's parent in the DOM tree
      * @return Style
      */
-    function create_style(Style $parent = null)
+    function create_style(?Style $parent = null)
     {
         if ($parent == null) {
             $parent = $this;

@@ -34,7 +34,7 @@ class Penarikan_investasi extends CI_Controller
 
     public function getDataID()
     {
-        $id = $_POST["id_penarikan"];
+        $id = $this->input->post("id_penarikan");
         echo json_encode($this->TransaksiInvestasi->getWhere('v_penarikan_investasi', array('id_penarikan' => $id))->result());
     }
 
@@ -192,7 +192,7 @@ class Penarikan_investasi extends CI_Controller
             'updated_by' => $this->session->userdata('user_id')
         ];
 
-        $this->TransaksiInvestasi->edit('saldo_harian', $update_saldo, array('no_rekening' => $no_rekening, 'tahun' => date('Y')));
+        $this->TransaksiInvestasi->edit('saldo_harian', $update_saldo, array('no_rekening' => $no_rekening, 'tahun' => $thn));
 
 
         echo json_encode('');
@@ -200,7 +200,7 @@ class Penarikan_investasi extends CI_Controller
 
     public function getJumlah()
     {
-        $no_rekening = $_POST['rekening'];
+        $no_rekening = $this->input->post('rekening');
         $thn = date('Y');
         echo json_encode($this->TransaksiInvestasi->jml_transaksi($no_rekening, $thn)->result());
     }

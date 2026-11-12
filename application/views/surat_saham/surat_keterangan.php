@@ -1,26 +1,17 @@
 <?php
 
-// URL of the image you want to load
-$imageUrl = base_url('assets/stisla/images/iaa.png');
-$imageUrl2 = base_url('assets/stisla/images/qrcode/penarikan/' . $data_penarikan->id_penarikan . '.png');
+// Path of the local images to load
+$imagePath = FCPATH . 'assets/stisla/images/iaa.png';
+$imagePath2 = FCPATH . 'assets/stisla/images/qrcode/penarikan/' . $data_penarikan->id_penarikan . '.png';
 
-// Initialize cURL session
-$ch = curl_init($imageUrl);
-$ch2 = curl_init($imageUrl2);
-
-// Set cURL options
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-
-// Execute cURL session and fetch the image data
-$imageData = curl_exec($ch);
-$imageData2 = curl_exec($ch2);
+$imageData = is_file($imagePath) ? file_get_contents($imagePath) : '';
+$imageData2 = is_file($imagePath2) ? file_get_contents($imagePath2) : '';
 
 $base64Image = base64_encode($imageData);
-$base64 = 'data:image/png'. ';base64,' . $base64Image;
+$base64 = 'data:image/png' . ';base64,' . $base64Image;
 
 $base64Image2 = base64_encode($imageData2);
-$base64qr = 'data:image/png'. ';base64,' . $base64Image2;
+$base64qr = 'data:image/png' . ';base64,' . $base64Image2;
 
 ?>
 
@@ -29,7 +20,6 @@ $base64qr = 'data:image/png'. ';base64,' . $base64Image2;
 
 <head>
     <title><?= $title ?></title>
-    <link rel="stylesheet" href="<?= base_url() ?>assets/stisla/vendors/fontawesome/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -109,7 +99,7 @@ $base64qr = 'data:image/png'. ';base64,' . $base64Image2;
             </tr>
         </table>
         <p style="margin-left: 114px; margin-right: 114px; margin-top: 3px; text-align: justify;">dengan ini mengakui telah melakukan penarikan dana investasi di CV. Dharma</p>
-        <p style="margin-left: 114px; margin-right: 114px; margin-top: 3px; text-align: justify;">IAA Sumenep Jawa Timur sebesar Rp. <?= number_format($data_penarikan->jml_penarikan, 2, ',', '.'); ?></p>
+        <p style="margin-left: 114px; margin-right: 114px; margin-top: 3px; text-align: justify;">IAA Sumenep Jawa Timur sebesar Rp. <?= number_format((float) $data_penarikan->jml_penarikan, 2, ',', '.'); ?></p>
         <p style="margin-left: 114px; margin-right: 114px; margin-top: 20px; text-align: justify;">Demikian keterangan ini saya buat dengan sadar tanpa ada unsur paksaan dari pihak manapun.</p>
 
         <table style="margin-left: 114px; margin-right: 114px; margin-top: 20px;" width=100%;>

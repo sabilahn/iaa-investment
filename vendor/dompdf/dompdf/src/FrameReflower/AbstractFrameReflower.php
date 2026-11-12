@@ -196,7 +196,7 @@ abstract class AbstractFrameReflower
      * @param Block|null $block
      * @return mixed
      */
-    abstract function reflow(Block $block = null);
+    abstract function reflow(?Block $block = null);
 
     /**
      * Required for table layout: Returns an array(0 => min, 1 => max, "min"

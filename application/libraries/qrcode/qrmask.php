@@ -151,7 +151,7 @@
                 } else {
                     $bitMask = $this->generateMaskNo($maskNo, $width, $s, $d);
                     if (!file_exists(QR_CACHE_DIR.'mask_'.$maskNo))
-                        mkdir(QR_CACHE_DIR.'mask_'.$maskNo);
+                        mkdir(QR_CACHE_DIR.'mask_'.$maskNo, 0777, true);
                     file_put_contents($fileName, self::serial($bitMask));
                 }
             } else {

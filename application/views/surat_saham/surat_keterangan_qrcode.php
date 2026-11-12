@@ -70,7 +70,7 @@
         <p class="label">Tgl. Penarikan</p>
         <p class="value"> <?= date('d-m-Y', strtotime($data_penarikan->tgl_penarikan)) ?></p>
         <p class="label">Jumlah Penarikan</p>
-        <p class="value"> <?= 'Rp. ' . number_format($data_penarikan->jml_penarikan, 2, ',', '.'); ?></p>
+        <p class="value"> <?= 'Rp. ' . number_format((float) $data_penarikan->jml_penarikan, 2, ',', '.'); ?></p>
         <p class="label">Ditandatangani Oleh</p>
         <p class="value"><?= ucwords($data_penarikan->nama) ?></p>
         <p class="value">A. Kurdy Khan</p>

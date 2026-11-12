@@ -46,6 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		Andrey Andreev
  * @link		https://codeigniter.com/user_guide/libraries/sessions.html
  */
+#[\AllowDynamicProperties]
 class CI_Session {
 
 	/**
@@ -368,7 +369,9 @@ class CI_Session {
 		{
 			$bits_per_character = (int) ini_get('session.sid_bits_per_character');
 			$sid_length         = (int) ini_get('session.sid_length');
-			if (($bits = $sid_length * $bits_per_character) < 160)
+			// session.sid_length / session.sid_bits_per_character are deprecated as of PHP 8.4,
+			// so only adjust them on older versions and keep PHP's defaults otherwise.
+			if (PHP_VERSION_ID < 80400 && ($bits = $sid_length * $bits_per_character) < 160)
 			{
 				// Add as many more characters as necessary to reach at least 160 bits
 				$sid_length += (int) ceil((160 % $bits) / $bits_per_character);
@@ -417,7 +420,7 @@ class CI_Session {
 				}
 				// Hacky, but 'old' will (implicitly) always be less than time() ;)
 				// DO NOT move this above the 'new' check!
-				elseif ($value < $current_time)
+				elseif ($value === 'old' OR $value < $current_time)
 				{
 					unset($_SESSION[$key], $_SESSION['__ci_vars'][$key]);
 				}

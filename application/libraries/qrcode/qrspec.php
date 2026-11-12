@@ -565,6 +565,8 @@
                         self::$frames[$version] = self::unserial(file_get_contents($fileName));
                     } else {
                         self::$frames[$version] = self::createFrame($version);
+                        if (!is_dir(QR_CACHE_DIR))
+                            mkdir(QR_CACHE_DIR, 0777, true);
                         file_put_contents($fileName, self::serial(self::$frames[$version]));
                     }
                 } else {

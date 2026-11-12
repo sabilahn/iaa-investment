@@ -32,6 +32,23 @@
         //----------------------------------------------------------------------
         public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE) 
         {
+            if (!function_exists('ImageCreate')) {
+                $pngData = self::pngFallback($frame, $pixelPerPoint, $outerFrame);
+                if ($filename === false) {
+                    Header("Content-type: image/png");
+                    echo $pngData;
+                } else {
+                    if ($saveandprint === TRUE) {
+                        file_put_contents($filename, $pngData);
+                        header("Content-type: image/png");
+                        echo $pngData;
+                    } else {
+                        file_put_contents($filename, $pngData);
+                    }
+                }
+                return;
+            }
+
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
             
             if ($filename === false) {
@@ -47,7 +64,9 @@
                 }
             }
             
-            ImageDestroy($image);
+            if (PHP_VERSION_ID < 80000) {
+                ImageDestroy($image);
+            }
         }
     
         //----------------------------------------------------------------------
@@ -62,7 +81,9 @@
                 ImageJpeg($image, $filename, $q);            
             }
             
-            ImageDestroy($image);
+            if (PHP_VERSION_ID < 80000) {
+                ImageDestroy($image);
+            }
         }
     
         //----------------------------------------------------------------------
@@ -91,8 +112,45 @@
             
             $target_image =ImageCreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
-            ImageDestroy($base_image);
+            if (PHP_VERSION_ID < 80000) {
+                ImageDestroy($base_image);
+            }
             
             return $target_image;
+        }
+
+        private static function pngChunk($type, $data)
+        {
+            return pack('N', strlen($data)) . $type . $data . pack('N', crc32($type . $data));
+        }
+
+        private static function pngFallback($frame, $pixelPerPoint = 4, $outerFrame = 4)
+        {
+            $h = count($frame);
+            $w = strlen($frame[0]);
+            $gridW = $w + 2 * $outerFrame;
+            $gridH = $h + 2 * $outerFrame;
+            $imgW = $gridW * $pixelPerPoint;
+            $imgH = $gridH * $pixelPerPoint;
+
+            $plte = chr(QRimage::$black[0]) . chr(QRimage::$black[1]) . chr(QRimage::$black[2])
+                  . chr(QRimage::$white[0]) . chr(QRimage::$white[1]) . chr(QRimage::$white[2]);
+
+            $rawData = '';
+            for ($y = 0; $y < $gridH; $y++) {
+                $rowBytes = "\x00";
+                for ($x = 0; $x < $gridW; $x++) {
+                    $bit = ($y >= $outerFrame && $y < $outerFrame + $h && $x >= $outerFrame && $x < $outerFrame + $w && $frame[$y - $outerFrame][$x - $outerFrame] == '1') ? "\x01" : "\x00";
+                    $rowBytes .= str_repeat($bit, $pixelPerPoint);
+                }
+                $rawData .= str_repeat($rowBytes, $pixelPerPoint);
+            }
+
+            $ihdr = pack('NNCCCCC', $imgW, $imgH, 8, 3, 0, 0, 0);
+            return "\x89PNG\r\n\x1a\n"
+                . self::pngChunk('IHDR', $ihdr)
+                . self::pngChunk('PLTE', $plte)
+                . self::pngChunk('IDAT', gzcompress($rawData, 6))
+                . self::pngChunk('IEND', '');
         }
     }

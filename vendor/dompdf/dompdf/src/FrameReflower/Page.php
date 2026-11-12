@@ -91,7 +91,7 @@ class Page extends AbstractFrameReflower
      *
      * @param BlockFrameDecorator|null $block
      */
-    function reflow(BlockFrameDecorator $block = null)
+    function reflow(?BlockFrameDecorator $block = null)
     {
         $fixed_children = [];
         $prev_child = null;

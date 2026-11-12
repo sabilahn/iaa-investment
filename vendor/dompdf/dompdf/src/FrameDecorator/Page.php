@@ -619,7 +619,7 @@ class Page extends AbstractFrameDecorator
      * @param Frame|null $frame
      * @param bool $force_pagebreak
      */
-    function split(Frame $frame = null, $force_pagebreak = false)
+    function split(?Frame $frame = null, $force_pagebreak = false)
     {
         // Do nothing
     }

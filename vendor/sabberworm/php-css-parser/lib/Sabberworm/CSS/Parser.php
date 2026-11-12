@@ -19,7 +19,7 @@ class Parser {
 	 * @param Settings|null $oParserSettings
 	 * @param int $iLineNo
 	 */
-	public function __construct($sText, Settings $oParserSettings = null, $iLineNo = 1) {
+	public function __construct($sText, ?Settings $oParserSettings = null, $iLineNo = 1) {
 		if ($oParserSettings === null) {
 			$oParserSettings = Settings::create();
 		}

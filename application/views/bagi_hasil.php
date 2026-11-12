@@ -63,11 +63,11 @@
                                     <td class="text-center"><?= $no ?></td>
                                     <td class="text-center"><?= $bagi_hasil['no_rekening'] ?></td>
                                     <!-- <td class="text-center"><?= $bagi_hasil['nama'] ?></td> -->
-                                    <td class="text-center"><?= number_format($bagi_hasil['saham_persero'], 2, ',', '.'); ?></td>
-                                    <td class="text-right"><?= number_format($bagi_hasil['shu'], 2, ',', '.'); ?></td>
-                                    <td class="text-right"><?= number_format($bagi_hasil['total_rata_harian'], 2, ',', '.'); ?></td>
-                                    <td class="text-right"><?= number_format($bagi_hasil['rata_harian_persero'], 2, ',', '.'); ?></td>
-                                    <td class="text-right"><?= number_format($bagi_hasil['nisbah_bagi_hasil'], 2, ',', '.'); ?></td>
+                                    <td class="text-center"><?= number_format((float) $bagi_hasil['saham_persero'], 2, ',', '.'); ?></td>
+                                    <td class="text-right"><?= number_format((float) $bagi_hasil['shu'], 2, ',', '.'); ?></td>
+                                    <td class="text-right"><?= number_format((float) $bagi_hasil['total_rata_harian'], 2, ',', '.'); ?></td>
+                                    <td class="text-right"><?= number_format((float) $bagi_hasil['rata_harian_persero'], 2, ',', '.'); ?></td>
+                                    <td class="text-right"><?= number_format((float) $bagi_hasil['nisbah_bagi_hasil'], 2, ',', '.'); ?></td>
                                 </tr>
                             <?php
                             }

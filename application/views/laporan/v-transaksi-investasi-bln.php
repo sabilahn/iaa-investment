@@ -28,14 +28,14 @@
                     <font color='#ffffff'>'</font><?= $trans_bln['no_sertifikat'] ?>
                 </td>
                 <td class="tengah"><?= $trans_bln['tgl_transaksi'] ?></td>
-                <td class="kanan"><?= number_format($trans_bln['jml_transaksi'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $trans_bln['jml_transaksi'], 2, ',', '.'); ?></td>
             </tr>
         <?php }
         ?>
 
         <tr>
             <td colspan="5" class="kanan"><b>Jumlah</b></td>
-            <td class="kanan"><b><?= number_format($total_transaksi, 2, ',', '.'); ?></b></td>
+            <td class="kanan"><b><?= number_format((float) $total_transaksi, 2, ',', '.'); ?></b></td>
         </tr>
     </tbody>
 </table>

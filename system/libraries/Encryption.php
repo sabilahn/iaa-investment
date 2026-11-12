@@ -48,6 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		Andrey Andreev
  * @link		https://codeigniter.com/user_guide/libraries/encryption.html
  */
+#[\AllowDynamicProperties]
 class CI_Encryption {
 
 	/**
@@ -368,7 +369,7 @@ class CI_Encryption {
 	 * @param	array	$params	Input parameters
 	 * @return	string
 	 */
-	public function encrypt($data, array $params = NULL)
+	public function encrypt($data, $params = NULL)
 	{
 		if (($params = $this->_get_params($params)) === FALSE)
 		{
@@ -503,7 +504,7 @@ class CI_Encryption {
 	 * @param	array	$params	Input parameters
 	 * @return	string
 	 */
-	public function decrypt($data, array $params = NULL)
+	public function decrypt($data, $params = NULL)
 	{
 		if (($params = $this->_get_params($params)) === FALSE)
 		{

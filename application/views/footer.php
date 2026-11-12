@@ -50,6 +50,27 @@
 <script src="<?= base_url() ?>assets/stisla/vendors/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <script src="<?= base_url() ?>assets/stisla/vendors/select2/dist/js/select2.full.min.js"></script>
 <script src="<?= base_url() ?>assets/stisla/vendors/jquery-selectric/jquery.selectric.min.js"></script>
+<script>
+    function initAutoDismissAlerts() {
+        $('.alert').each(function() {
+            var $alert = $(this);
+            if (!$alert.data('auto-dismiss-bound')) {
+                $alert.data('auto-dismiss-bound', true);
+                setTimeout(function() {
+                    $alert.fadeOut(400, function() {
+                        $(this).remove();
+                    });
+                }, 3000);
+            }
+        });
+    }
+    $(document).ready(function() {
+        initAutoDismissAlerts();
+    });
+    $(document).ajaxComplete(function() {
+        initAutoDismissAlerts();
+    });
+</script>
 </body>
 
 </html>

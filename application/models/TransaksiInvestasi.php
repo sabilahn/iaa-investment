@@ -15,7 +15,7 @@ class TransaksiInvestasi extends CI_Model
             ->where('tgl_transaksi >=', $start)
             ->where('tgl_transaksi <=', $end)
             ->where('is_deleted', 0)
-            ->order_by('created_at', 'DESC')
+            ->order_by('id_transaksi', 'DESC')
             ->get();
     }
     
@@ -174,7 +174,7 @@ class TransaksiInvestasi extends CI_Model
     public function getSertifikat($id_transaksi)
     {
         return $this->db
-            ->select('no_sertfikat')
+            ->select('no_sertifikat')
             ->where('id_transaksi', $id_transaksi)
             ->get('transaksi_investasi');
     }

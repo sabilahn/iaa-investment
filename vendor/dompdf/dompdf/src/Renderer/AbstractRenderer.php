@@ -295,7 +295,7 @@ abstract class AbstractRenderer
 
             if ($img_w != $org_img_w || $img_h != $org_img_h) {
                 $newSrc = imagescale($src, $img_w, $img_h);
-                imagedestroy($src);
+                if (PHP_VERSION_ID < 80000) imagedestroy($src);
                 $src = $newSrc;
             }
 
@@ -402,7 +402,7 @@ abstract class AbstractRenderer
                 print 'Unknown repeat!';
             }
 
-            imagedestroy($src);
+            if (PHP_VERSION_ID < 80000) imagedestroy($src);
 
         } /* End optimize away creation of duplicates */
 
@@ -435,7 +435,7 @@ abstract class AbstractRenderer
 
             imagepng($bg, $tmp_file);
             $this->_canvas->image($tmp_file, $x, $y, $width, $height);
-            imagedestroy($bg);
+            if (PHP_VERSION_ID < 80000) imagedestroy($bg);
 
             //debugpng
             if ($this->_dompdf->getOptions()->getDebugPng()) {

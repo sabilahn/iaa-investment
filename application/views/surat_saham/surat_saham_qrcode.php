@@ -70,7 +70,7 @@
         <p class="label">Tgl. Transaksi</p>
         <p class="value"> <?= date('d-m-Y', strtotime($data_transaksi->tgl_transaksi)) ?></p>
         <p class="label">Nilai Investasi</p>
-        <p class="value"> <?= 'Rp. ' . number_format($data_transaksi->jml_transaksi, 2, ',', '.'); ?></p>
+        <p class="value"> <?= 'Rp. ' . number_format((float) $data_transaksi->jml_transaksi, 2, ',', '.'); ?></p>
         <p class="label">Ditandatangani Oleh</p>
         <p class="value">A. Kurdy Khan</p>
         

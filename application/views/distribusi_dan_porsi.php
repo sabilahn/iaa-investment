@@ -66,8 +66,8 @@
                                         <td class="text-center"><?= $no ?></td>
                                         <td class="text-center"><?= $dispen['porsi'] . '%' ?></td>
                                         <td><?= $dispen['uraian'] ?></td>
-                                        <td class="text-right"><?= number_format($dispen['shu'], 2, ',', '.'); ?></td>
-                                        <td class="text-right"><?= number_format($dispen['jumlah'], 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $dispen['shu'], 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $dispen['jumlah'], 2, ',', '.'); ?></td>
                                     </tr>
                                 <?php
                                 }
@@ -77,7 +77,7 @@
                                     <td></td>
                                     <td></td>
                                     <td class="text-right"><b>Jumlah</b></td>
-                                    <td class="text-right"><b><?= number_format($total_dispen, 2, ',', '.'); ?></b></td>
+                                    <td class="text-right"><b><?= number_format((float) $total_dispen, 2, ',', '.'); ?></b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -116,8 +116,8 @@
                                         <td class="text-center"><?= $no ?></td>
                                         <td class="text-center"><?= $disda['porsi'] . '%' ?></td>
                                         <td><?= $disda['uraian'] ?></td>
-                                        <td class="text-right"><?= number_format($disda['menejemen'], 2, ',', '.'); ?></td>
-                                        <td class="text-right"><?= number_format($disda['jumlah'], 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $disda['menejemen'], 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $disda['jumlah'], 2, ',', '.'); ?></td>
                                     </tr>
                                 <?php
                                 }
@@ -127,7 +127,7 @@
                                     <td></td>
                                     <td></td>
                                     <td class="text-right"><b>Jumlah</b></td>
-                                    <td class="text-right"><b><?= number_format($total_disda, 2, ',', '.'); ?></b></td>
+                                    <td class="text-right"><b><?= number_format((float) $total_disda, 2, ',', '.'); ?></b></td>
                                 </tr>
                             </tbody>
                         </table>

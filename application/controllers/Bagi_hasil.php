@@ -34,6 +34,10 @@ class Bagi_hasil extends CI_Controller
     {
         $data['title'] = 'IAA Investment | Bagi Hasil SHU';
         $tahun = $this->input->post('tahunBagiHasil');
+        if ($tahun == "") {
+            $tahun = date('Y');
+        }
+        $data['tahun'] = $tahun;
         $data['data_bagi_hasil'] = $this->BagiHasil->data($tahun)->result_array();
 
         $this->load->view('header', $data);

@@ -21,24 +21,24 @@ class Ciqrcode
 	
 	function __construct($config = array()) {
 		// call original library
-		include "qrcode/qrconst.php";
-		include "qrcode/qrtools.php";
-		include "qrcode/qrspec.php";
-		include "qrcode/qrimage.php";
-		include "qrcode/qrinput.php";
-		include "qrcode/qrbitstream.php";
-		include "qrcode/qrsplit.php";
-		include "qrcode/qrrscode.php";
-		include "qrcode/qrmask.php";
-		include "qrcode/qrencode.php";
+		include_once "qrcode/qrconst.php";
+		include_once "qrcode/qrtools.php";
+		include_once "qrcode/qrspec.php";
+		include_once "qrcode/qrimage.php";
+		include_once "qrcode/qrinput.php";
+		include_once "qrcode/qrbitstream.php";
+		include_once "qrcode/qrsplit.php";
+		include_once "qrcode/qrrscode.php";
+		include_once "qrcode/qrmask.php";
+		include_once "qrcode/qrencode.php";
 		
 		$this->initialize($config);
 	}
 	
 	public function initialize($config = array()) {
 		$this->cacheable = (isset($config['cacheable'])) ? $config['cacheable'] : $this->cacheable;
-		$this->cachedir = (isset($config['cachedir'])) ? $config['cachedir'] : FCPATH.$this->cachedir;
-		$this->errorlog = (isset($config['errorlog'])) ? $config['errorlog'] : FCPATH.$this->errorlog;
+		$this->cachedir = rtrim((isset($config['cachedir'])) ? $config['cachedir'] : FCPATH.$this->cachedir, '/\\').DIRECTORY_SEPARATOR;
+		$this->errorlog = rtrim((isset($config['errorlog'])) ? $config['errorlog'] : FCPATH.$this->errorlog, '/\\').DIRECTORY_SEPARATOR;
 		$this->quality = (isset($config['quality'])) ? $config['quality'] : $this->quality;
 		$this->size = (isset($config['size'])) ? $config['size'] : $this->size;
 		
@@ -89,6 +89,10 @@ class Ciqrcode
 			$size = 4;
 			if (isset($params['size'])) $size = min(max((int)$params['size'], 1), 10);
 			
+			$dir = dirname($params['savename']);
+			if (!is_dir($dir)) {
+				mkdir($dir, 0755, true);
+			}
 			QRcode::png($params['data'], $params['savename'], $level, $size, 2);
 			return $params['savename'];
 		} else {

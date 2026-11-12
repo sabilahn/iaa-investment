@@ -1,33 +1,22 @@
 <?php
 
-// URL of the image you want to load
-$imageUrl = base_url('assets/stisla/images/iaa.png');
-$imageUrl2 = base_url('assets/stisla/images/bg.png');
-$imageUrl3 = base_url('assets/stisla/images/qrcode/surat_saham/' . $data_transaksi->no_sertifikat . '.png');
+// Path of the local images to load
+$imagePath = FCPATH . 'assets/stisla/images/iaa.png';
+$imagePath2 = FCPATH . 'assets/stisla/images/bg.png';
+$imagePath3 = FCPATH . 'assets/stisla/images/qrcode/surat_saham/' . $data_transaksi->no_sertifikat . '.png';
 
-// Initialize cURL session
-$ch = curl_init($imageUrl);
-$ch2 = curl_init($imageUrl2);
-$ch3 = curl_init($imageUrl3);
-
-// Set cURL options
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch3, CURLOPT_RETURNTRANSFER, true);
-
-// Execute cURL session and fetch the image data
-$imageData = curl_exec($ch);
-$imageData2 = curl_exec($ch2);
-$imageData3 = curl_exec($ch3);
+$imageData = is_file($imagePath) ? file_get_contents($imagePath) : '';
+$imageData2 = is_file($imagePath2) ? file_get_contents($imagePath2) : '';
+$imageData3 = is_file($imagePath3) ? file_get_contents($imagePath3) : '';
 
 $base64Image = base64_encode($imageData);
-$base64 = 'data:image/png'. ';base64,' . $base64Image;
+$base64 = 'data:image/png' . ';base64,' . $base64Image;
 
 $base64Image2 = base64_encode($imageData2);
-$base642 = 'data:image/png'. ';base64,' . $base64Image2;
+$base642 = 'data:image/png' . ';base64,' . $base64Image2;
 
 $base64Image3 = base64_encode($imageData3);
-$base64qr = 'data:image/png'. ';base64,' . $base64Image3;
+$base64qr = 'data:image/png' . ';base64,' . $base64Image3;
 
 
 ?>
@@ -37,7 +26,6 @@ $base64qr = 'data:image/png'. ';base64,' . $base64Image3;
 
 <head>
     <title><?= $title ?></title>
-    <link rel="stylesheet" href="<?= base_url() ?>assets/stisla/vendors/fontawesome/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -214,7 +202,7 @@ $base64qr = 'data:image/png'. ';base64,' . $base64Image3;
                             <tr>
                                 <td>Nilai Investasi</td>
                                 <td class="titik2" style="padding-left: 50px;">:</td>
-                                <td class="value" style="font-size: 25px;"><b><?= 'Rp. ' . number_format($data_transaksi->jml_transaksi, 2, ',', '.'); ?><b></td>
+                                <td class="value" style="font-size: 25px;"><b><?= 'Rp. ' . number_format((float) $data_transaksi->jml_transaksi, 2, ',', '.'); ?><b></td>
                             </tr>
                         </table>
                     </div>

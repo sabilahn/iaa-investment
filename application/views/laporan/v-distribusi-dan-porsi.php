@@ -24,8 +24,8 @@
                 <td class="tengah"><?= $no ?></td>
                 <td class="tengah"><?= $dispen['porsi'] . '%' ?></td>
                 <td><?= $dispen['uraian'] ?></td>
-                <td class="kanan"><?= number_format($dispen['shu'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($dispen['jumlah'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $dispen['shu'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $dispen['jumlah'], 2, ',', '.'); ?></td>
             </tr>
         <?php
         }
@@ -35,7 +35,7 @@
             <td class="tengah"><?= $total_porsi_dispen . '%' ?></td>
             <td></td>
             <td></td>
-            <td class="kanan"><b><?= number_format($total_jumlah_dispen, 2, ',', '.'); ?></b></td>
+            <td class="kanan"><b><?= number_format((float) $total_jumlah_dispen, 2, ',', '.'); ?></b></td>
         </tr>
     </tbody>
 </table>
@@ -65,8 +65,8 @@
                 <td class="tengah"><?= $no ?></td>
                 <td class="tengah"><?= $disda['porsi'] . '%' ?></td>
                 <td><?= $disda['uraian'] ?></td>
-                <td class="kanan"><?= number_format($disda['menejemen'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($disda['jumlah'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $disda['menejemen'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $disda['jumlah'], 2, ',', '.'); ?></td>
             </tr>
         <?php
         }
@@ -76,7 +76,7 @@
             <td class="tengah"><?= $total_porsi_disda . '%' ?></td>
             <td></td>
             <td></td>
-            <td class="kanan"><b><?= number_format($total_jumlah_disda, 2, ',', '.'); ?></b></td>
+            <td class="kanan"><b><?= number_format((float) $total_jumlah_disda, 2, ',', '.'); ?></b></td>
         </tr>
     </tbody>
 </table>

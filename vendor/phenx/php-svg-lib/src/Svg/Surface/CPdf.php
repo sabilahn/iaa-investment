@@ -3953,7 +3953,7 @@ EOT;
      * @param bool     $is_mask true if the image is a mask
      * @param bool     $mask    true if the image is masked
      */
-    function addImagePng($file, $x, $y, $w = 0.0, $h = 0.0, &$img, $is_mask = false, $mask = null)
+    function addImagePng($file, $x, $y, $w, $h, &$img, $is_mask = false, $mask = null)
     {
         if (!function_exists("imagepng")) {
             throw new Exception("The PHP GD extension is required, but is not installed.");
@@ -4052,7 +4052,7 @@ EOT;
             // Cast to 8bit+palette
             $imgalpha_ = imagecreatefrompng($tempfile_alpha);
             imagecopy($imgalpha, $imgalpha_, 0, 0, 0, 0, $wpx, $hpx);
-            imagedestroy($imgalpha_);
+            if (PHP_VERSION_ID < 80000) imagedestroy($imgalpha_);
             imagepng($imgalpha, $tempfile_alpha);
 
             // Make opaque image
@@ -4085,7 +4085,7 @@ EOT;
             // Cast to 8bit+palette
             $imgalpha_ = imagecreatefrompng($tempfile_alpha);
             imagecopy($imgalpha, $imgalpha_, 0, 0, 0, 0, $wpx, $hpx);
-            imagedestroy($imgalpha_);
+            if (PHP_VERSION_ID < 80000) imagedestroy($imgalpha_);
             imagepng($imgalpha, $tempfile_alpha);
 
             // Make opaque image
@@ -4135,7 +4135,7 @@ EOT;
             // extract image without alpha channel
             $imgplain = imagecreatetruecolor($wpx, $hpx);
             imagecopy($imgplain, $img, 0, 0, 0, 0, $wpx, $hpx);
-            imagedestroy($img);
+            if (PHP_VERSION_ID < 80000) imagedestroy($img);
 
             imagepng($imgalpha, $tempfile_alpha);
             imagepng($imgplain, $tempfile_plain);
@@ -4143,11 +4143,11 @@ EOT;
 
         // embed mask image
         $this->addImagePng($tempfile_alpha, $x, $y, $w, $h, $imgalpha, true);
-        imagedestroy($imgalpha);
+        if (PHP_VERSION_ID < 80000) imagedestroy($imgalpha);
 
         // embed image, masked with previously embedded mask
         $this->addImagePng($tempfile_plain, $x, $y, $w, $h, $imgplain, false, true);
-        imagedestroy($imgplain);
+        if (PHP_VERSION_ID < 80000) imagedestroy($imgplain);
 
         // remove temp files
         unlink($tempfile_alpha);
@@ -4214,19 +4214,19 @@ EOT;
             }
 
             imagecopy($img, $imgtmp, 0, 0, 0, 0, $sx, $sy);
-            imagedestroy($imgtmp);
+            if (PHP_VERSION_ID < 80000) imagedestroy($imgtmp);
         }
         $this->addImagePng($file, $x, $y, $w, $h, $img);
 
         if ($img) {
-            imagedestroy($img);
+            if (PHP_VERSION_ID < 80000) imagedestroy($img);
         }
     }
 
     /**
      * add a PNG image into the document, from a memory buffer of the file
      */
-    function addPngFromBuf($file, $x, $y, $w = 0.0, $h = 0.0, &$data, $is_mask = false, $mask = null)
+    function addPngFromBuf($file, $x, $y, $w, $h, &$data, $is_mask = false, $mask = null)
     {
         if (isset($this->imagelist[$file])) {
             $data = null;
@@ -4555,11 +4555,11 @@ EOT;
         &$data,
         $x,
         $y,
-        $w = 0,
-        $h = 0,
+        $w,
+        $h,
         $imageWidth,
         $imageHeight,
-        $channels = 3,
+        $channels,
         $imgname
     ) {
         if ($this->image_iscached($imgname)) {

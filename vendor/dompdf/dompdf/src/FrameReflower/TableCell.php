@@ -29,7 +29,7 @@ class TableCell extends Block
     /**
      * @param BlockFrameDecorator|null $block
      */
-    function reflow(BlockFrameDecorator $block = null)
+    function reflow(?BlockFrameDecorator $block = null)
     {
         $style = $this->_frame->get_style();
 

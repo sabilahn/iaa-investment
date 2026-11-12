@@ -37,14 +37,14 @@ require_once('header_pdf.php');
                         <font color='#ffffff'>'</font><?= $trans_terkini['no_sertifikat'] ?>
                     </td>
                     <td class="tengah"><?= $trans_terkini['tgl_transaksi'] ?></td>
-                    <td class="kanan"><?= number_format($trans_terkini['jml_transaksi'], 2, ',', '.'); ?></td>
+                    <td class="kanan"><?= number_format((float) $trans_terkini['jml_transaksi'], 2, ',', '.'); ?></td>
                 </tr>
             <?php }
             ?>
 
             <tr>
                 <td colspan="5" class="kanan"><b>Jumlah</b></td>
-                <td class="kanan"><b><?= number_format($total_transaksi, 2, ',', '.'); ?></b></td>
+                <td class="kanan"><b><?= number_format((float) $total_transaksi, 2, ',', '.'); ?></b></td>
             </tr>
         </tbody>
     </table>

@@ -43,11 +43,11 @@ header("Content-Disposition: attachment; filename=bagi_hasil_shu" . "_" . $kecam
                 if ($kecamatan == "Semua") { ?>
                     <td><?= ucwords($bagi_hasil['kec']) ?></td>
                 <?php } ?>
-                <td class="kanan"><?= number_format($bagi_hasil['saham_persero'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($bagi_hasil['shu'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($bagi_hasil['total_rata_harian'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($bagi_hasil['rata_harian_persero'], 2, ',', '.'); ?></td>
-                <td class="kanan"><?= number_format($bagi_hasil['nisbah_bagi_hasil'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $bagi_hasil['saham_persero'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $bagi_hasil['shu'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $bagi_hasil['total_rata_harian'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $bagi_hasil['rata_harian_persero'], 2, ',', '.'); ?></td>
+                <td class="kanan"><?= number_format((float) $bagi_hasil['nisbah_bagi_hasil'], 2, ',', '.'); ?></td>
             </tr>
         <?php
         }
@@ -55,16 +55,16 @@ header("Content-Disposition: attachment; filename=bagi_hasil_shu" . "_" . $kecam
         <tr>
             <?php
             if ($kecamatan == "Semua") { ?>
-                <td colspan="4" class="kanan"><b>Jumlah</b></td>
+                <td colspan="6" class="kanan"><b>Jumlah</b></td>
             <?php } else { ?>
-                <td colspan="3" class="kanan"><b>Jumlah</b></td>
+                <td colspan="5" class="kanan"><b>Jumlah</b></td>
             <?php }
             ?>
-            <td class="kanan"><b><?= number_format($total_saham_persero, 2, ',', '.'); ?></b></td>
+            <td class="kanan"><b><?= number_format((float) $total_saham_persero, 2, ',', '.'); ?></b></td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="kanan"><b><?= number_format($total_nisbah, 2, ',', '.'); ?></b></td>
+            <td class="kanan"><b><?= number_format((float) $total_nisbah, 2, ',', '.'); ?></b></td>
         </tr>
     </tbody>
 </table>

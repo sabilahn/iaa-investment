@@ -277,7 +277,7 @@
                     '<div class="alert-body text-center">' +
                     '<button class="close" data-dismiss="alert">' +
                     '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil disimpan</b></div></div>;'
+                    '<b>Sukses! Data berhasil disimpan</b></div></div>';
 
                 $('#tambahModal').modal('hide');
                 $('#error-message').html(html);
@@ -320,7 +320,7 @@
                     '<div class="alert-body text-center">' +
                     '<button class="close" data-dismiss="alert">' +
                     '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil disimpan</b></div></div>;'
+                    '<b>Sukses! Data berhasil disimpan</b></div></div>';
 
                 $('#error-message').html(html);
             }
@@ -361,7 +361,7 @@
                     '<div class="alert-body text-center">' +
                     '<button class="close" data-dismiss="alert">' +
                     '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil dihapus</b></div></div>;'
+                    '<b>Sukses! Data berhasil dihapus</b></div></div>';
 
                 $('#error-message').html(html);
             }
@@ -369,6 +369,6 @@
     }
 
     function print(id_penarikan) {
-        window.open("cetak_surat_keterangan/" + id_penarikan);
+        window.open("<?= site_url('transaksi_investasi/cetak_surat_keterangan/') ?>" + id_penarikan);
     }
 </script>

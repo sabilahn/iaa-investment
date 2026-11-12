@@ -198,7 +198,7 @@ $base643 = 'data:image/' . $type3 . ';base64,' . base64_encode($data3);
                             <tr>
                                 <td>Nilai Investasi</td>
                                 <td class="titik2" style="padding-left: 50px;">:</td>
-                                <td class="value" style="font-size: 25px;"><b><?= 'Rp. ' . number_format($data_transaksi->jml_transaksi, 2, ',', '.'); ?><b></td>
+                                <td class="value" style="font-size: 25px;"><b><?= 'Rp. ' . number_format((float) $data_transaksi->jml_transaksi, 2, ',', '.'); ?><b></td>
                             </tr>
                         </table>
                     </div>

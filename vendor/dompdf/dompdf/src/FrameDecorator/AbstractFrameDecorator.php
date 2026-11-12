@@ -647,7 +647,7 @@ abstract class AbstractFrameDecorator extends Frame
      * @throws Exception
      * @return void
      */
-    function split(Frame $child = null, $force_pagebreak = false)
+    function split(?Frame $child = null, $force_pagebreak = false)
     {
         // decrement any counters that were incremented on the current node, unless that node is the body
         $style = $this->_frame->get_style();
@@ -887,7 +887,7 @@ abstract class AbstractFrameDecorator extends Frame
     /**
      * @param Block|null $block
      */
-    final function reflow(Block $block = null)
+    final function reflow(?Block $block = null)
     {
         // Uncomment this to see the frames before they're laid out, instead of
         // during rendering.

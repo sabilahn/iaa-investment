@@ -46,6 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/libraries/form_validation.html
  */
+#[\AllowDynamicProperties]
 class CI_Form_validation {
 
 	/**
@@ -753,7 +754,9 @@ class CI_Form_validation {
 				if (function_exists($rule))
 				{
 					// Native PHP functions issue warnings if you pass them more parameters than they use
-					$result = ($param !== FALSE) ? $rule($postdata, $param) : $rule($postdata);
+					// PHP 8.1+: most native string functions no longer accept NULL
+					$_arg = ($postdata === NULL) ? '' : $postdata;
+					$result = ($param !== FALSE) ? $rule($_arg, $param) : $rule($_arg);
 
 					if ($_in_array === TRUE)
 					{
@@ -1056,7 +1059,7 @@ class CI_Form_validation {
 	{
 		return is_array($str)
 			? (empty($str) === FALSE)
-			: (trim($str) !== '');
+			: (trim((string) $str) !== '');
 	}
 
 	// --------------------------------------------------------------------

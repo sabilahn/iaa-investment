@@ -102,7 +102,7 @@ class Text extends AbstractRenderer
         $underline_position = -0.08;
 
         if ($this->_canvas instanceof CPDF) {
-            $cpdf_font = $this->_canvas->get_cpdf()->fonts[$style->font_family];
+            $cpdf_font = $this->_canvas->get_cpdf()->fonts[$style->font_family] ?? null;
 
             if (isset($cpdf_font["UnderlinePosition"])) {
                 $underline_position = $cpdf_font["UnderlinePosition"] / 1000;

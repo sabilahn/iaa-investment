@@ -61,10 +61,10 @@ $thisPage1 = $this->uri->segment(2);
                         <li class="<?= ($thisPage1 == 'activity') ? 'active' : ''; ?>"><a class="nav-link" href="<?= site_url() ?>users/activity">Aktivitas User</a></li>
                     </ul>
                 </li>
-        </ul>
-    <?php
+            <?php
             }
-    ?>
+            ?>
+        </ul>
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
         <a href="<?= site_url('auth/logout') ?>" class="btn btn-light btn-lg btn-block btn-icon-split">
             <i class="fas fa-sign-out-alt"></i> <b>Logout</b>

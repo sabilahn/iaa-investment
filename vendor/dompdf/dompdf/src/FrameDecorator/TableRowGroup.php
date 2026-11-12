@@ -39,7 +39,7 @@ class TableRowGroup extends AbstractFrameDecorator
      *
      * @return void
      */
-    function split(Frame $child = null, $force_pagebreak = false)
+    function split(?Frame $child = null, $force_pagebreak = false)
     {
         if (is_null($child)) {
             parent::split();

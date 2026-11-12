@@ -31,8 +31,8 @@ class Saham_umum extends CI_Controller
 
     public function getDataID()
     {
-        $no_rekening = $_POST['no_rekening'];
-        $tahun = $_POST['tahun'];
+        $no_rekening = $this->input->post('no_rekening');
+        $tahun = $this->input->post('tahun');
 
         echo json_encode($this->TransaksiInvestasi->getSaldoId($tahun, $no_rekening)->result());
     }

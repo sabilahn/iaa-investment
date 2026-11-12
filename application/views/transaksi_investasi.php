@@ -55,6 +55,16 @@
                             </div>
                         </div>
                     <?php endif; ?>
+                    <?php if ($this->session->flashdata('error')) : ?>
+                        <div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body text-center">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                <b><?= $this->session->flashdata('error') ?></b>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="table-responsive">
                         <table class="table table-striped" id="table-1">
                             <thead>
@@ -83,7 +93,7 @@
                                         <td class="text-center"><?= $no_rekening ?></td>
                                         <td class="text-center"><?= $no_sertifikat ?></td>
                                         <td class="text-center"><?= $tgl_transaksi ?></td>
-                                        <td class="text-right"><?= number_format($jml_transaksi, 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $jml_transaksi, 2, ',', '.'); ?></td>
                                         <td class="text-center">
                                             <?= $transaksi['action'] ?>
                                         </td>

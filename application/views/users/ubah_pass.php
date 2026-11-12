@@ -123,6 +123,15 @@
     <!--[if !IE]> -->
     <script src="<?php echo base_url() ?>assets/stisla/vendors/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>assets/stisla/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.alert').fadeOut(400, function() {
+                    $(this).remove();
+                });
+            }, 3000);
+        });
+    </script>
 
     <!-- <![endif]-->
 

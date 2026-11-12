@@ -56,7 +56,7 @@
                                     <tr>
                                         <td class="text-center"><?= $no ?></td>
                                         <td class="text-center"><?= $shu['tahun'] ?></td>
-                                        <td class="text-right"><?= number_format($shu['jumlah'], 2, ',', '.'); ?></td>
+                                        <td class="text-right"><?= number_format((float) $shu['jumlah'], 2, ',', '.'); ?></td>
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal<?= $shu['id_shu'] ?>"><i class="fas fa-pencil-alt"></i></button>
                                             <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#hapusModal<?= $shu['id_shu'] ?>"><i class=" fa fa-trash"></i></button>

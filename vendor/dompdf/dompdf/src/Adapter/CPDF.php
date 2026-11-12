@@ -180,7 +180,7 @@ class CPDF implements Canvas
      * @param string $orientation The orientation of the document (either 'landscape' or 'portrait')
      * @param Dompdf $dompdf The Dompdf instance
      */
-    public function __construct($paper = "letter", $orientation = "portrait", Dompdf $dompdf = null)
+    public function __construct($paper = "letter", $orientation = "portrait", ?Dompdf $dompdf = null)
     {
         if (is_array($paper)) {
             $size = $paper;
@@ -640,7 +640,7 @@ class CPDF implements Canvas
                 $this->_image_cache[] = $filename;
 
                 imagepng($im, $filename);
-                imagedestroy($im);
+                if (PHP_VERSION_ID < 80000) imagedestroy($im);
             } else {
                 $filename = Cache::$broken_image;
             }

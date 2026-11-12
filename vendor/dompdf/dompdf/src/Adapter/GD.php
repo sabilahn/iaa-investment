@@ -138,7 +138,7 @@ class GD implements Canvas
      * @param float $aa_factor Anti-aliasing factor, 1 for no AA
      * @param array $bg_color Image background color: array(r,g,b,a), 0 <= r,g,b,a <= 1
      */
-    public function __construct($size = 'letter', $orientation = "portrait", Dompdf $dompdf = null, $aa_factor = 1.0, $bg_color = [1, 1, 1, 0])
+    public function __construct($size = 'letter', $orientation = "portrait", ?Dompdf $dompdf = null, $aa_factor = 1.0, $bg_color = [1, 1, 1, 0])
     {
 
         if (!is_array($size)) {
@@ -1111,7 +1111,7 @@ class GD implements Canvas
         }
 
         if ($this->_aa_factor != 1) {
-            imagedestroy($dst);
+            if (PHP_VERSION_ID < 80000) imagedestroy($dst);
         }
     }
 }

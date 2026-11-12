@@ -33,14 +33,14 @@ require_once('header_pdf.php');
                     <td  style="text-align: center"><?= $saldo['no_rekening'] ?></td>
                     <td><?= ucwords($saldo['nama']) ?></td>
                     <td class="tengah"><?= $saldo['tgl_transaksi'] ?></td>
-                    <td class="kanan"><?= number_format($saldo['jml_transaksi'], 2, ',', '.'); ?></td>
+                    <td class="kanan"><?= number_format((float) $saldo['jml_transaksi'], 2, ',', '.'); ?></td>
                 </tr>
             <?php }
             ?>
 
             <tr>
                 <td colspan="4" class="kanan"><b>Jumlah</b></td>
-                <td class="kanan"><b><?= number_format($total_transaksi, 2, ',', '.'); ?></b></td>
+                <td class="kanan"><b><?= number_format((float) $total_transaksi, 2, ',', '.'); ?></b></td>
             </tr>
         </tbody>
     </table>

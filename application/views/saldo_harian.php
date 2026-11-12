@@ -85,9 +85,9 @@
                                     <td class="text-center"><?= $no ?></td>
                                     <td class="text-center"><?= $saldo['no_rekening'] ?></td>
                                     <td class="text-center"><?= $saldo['tgl_daftar'] ?></td>
-                                    <td class="text-right"><?= number_format($saldo['nilai_investasi'], 2, ',', '.'); ?></td>
-                                    <!-- <td class="text-right"><?= number_format($saldo['rata_rata_harian'], 2, ',', '.'); ?></td> -->
-                                    <td class="text-right"><?= number_format($saldo['rata_rata_tahun'], 2, ',', '.'); ?></td>
+                                    <td class="text-right"><?= number_format((float) $saldo['nilai_investasi'], 2, ',', '.'); ?></td>
+                                    <!-- <td class="text-right"><?= number_format((float) $saldo['rata_rata_harian'], 2, ',', '.'); ?></td> -->
+                                    <td class="text-right"><?= number_format((float) $saldo['rata_rata_tahun'], 2, ',', '.'); ?></td>
                                 </tr>
                             <?php }
                             ?>

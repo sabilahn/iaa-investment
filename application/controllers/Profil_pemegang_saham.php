@@ -33,7 +33,7 @@ class Profil_pemegang_saham extends CI_Controller
     public function show()
     {
         $res = $this->ProfilPemegangSaham->profiles();
-        echo json_encode($res->result_array());
+        echo json_encode($res);
     }
     
     public function get_bank()

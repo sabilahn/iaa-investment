@@ -119,7 +119,7 @@ class Table extends AbstractFrameDecorator
      *
      * @return void
      */
-    public function split(Frame $child = null, $force_pagebreak = false)
+    public function split(?Frame $child = null, $force_pagebreak = false)
     {
         if (is_null($child)) {
             parent::split();

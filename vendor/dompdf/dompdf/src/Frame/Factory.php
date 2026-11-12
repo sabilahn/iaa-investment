@@ -66,7 +66,7 @@ class Factory
      * @return AbstractFrameDecorator
      * FIXME: this is admittedly a little smelly...
      */
-    static function decorate_frame(Frame $frame, Dompdf $dompdf, Frame $root = null)
+    static function decorate_frame(Frame $frame, Dompdf $dompdf, ?Frame $root = null)
     {
         if (is_null($dompdf)) {
             throw new Exception("The DOMPDF argument is required");

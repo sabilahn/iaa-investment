@@ -56,7 +56,7 @@ class Helpers
      */
     public static function build_url($protocol, $host, $base_path, $url)
     {
-        $protocol = mb_strtolower($protocol);
+        $protocol = mb_strtolower($protocol ?? "");
         if (strlen($url) == 0) {
             //return $protocol . $host . rtrim($base_path, "/\\") . "/";
             return $protocol . $host . $base_path;
@@ -533,7 +533,7 @@ class Helpers
     public static function record_warnings($errno, $errstr, $errfile, $errline)
     {
         // Not a warning or notice
-        if (!($errno & (E_WARNING | E_NOTICE | E_USER_NOTICE | E_USER_WARNING | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED))) {
+        if (!($errno & (E_WARNING | E_NOTICE | E_USER_NOTICE | E_USER_WARNING | 2048 | E_DEPRECATED | E_USER_DEPRECATED))) {
             throw new Exception($errstr . " $errno");
         }
 
@@ -872,8 +872,8 @@ class Helpers
                 if ($result !== false) {
                     $content = $result;
                 }
-                if (isset($http_response_header)) {
-                    $headers = $http_response_header;
+                if (function_exists('http_get_last_response_headers')) {
+                    $headers = http_get_last_response_headers() ?: [];
                 }
 
             } elseif (function_exists('curl_exec')) {

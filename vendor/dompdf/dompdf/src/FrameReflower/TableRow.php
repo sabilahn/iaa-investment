@@ -31,7 +31,7 @@ class TableRow extends AbstractFrameReflower
     /**
      * @param BlockFrameDecorator|null $block
      */
-    function reflow(BlockFrameDecorator $block = null)
+    function reflow(?BlockFrameDecorator $block = null)
     {
         $page = $this->_frame->get_root();
 

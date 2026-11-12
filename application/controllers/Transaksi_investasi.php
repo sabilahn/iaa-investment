@@ -20,6 +20,9 @@ class Transaksi_investasi extends CI_Controller
 
         $thn = $this->input->post('tahun_transaksi');
         if ($thn == "") {
+            $thn = $this->session->flashdata('tahun_transaksi');
+        }
+        if ($thn == "") {
             $thn = date('Y');
         }
         $data['tahun'] = $thn;
@@ -29,7 +32,7 @@ class Transaksi_investasi extends CI_Controller
         foreach ($data['data_transaksi'] as $i => $transaksi) {
             $saldo = $this->TransaksiInvestasi->getWhere('v_transaksi_thn', ['no_rekening' => $transaksi['no_rekening'], 'tahun' => $thn - 1])->row_array();
             // var_dump($saldo['saldo']);
-            if ($transaksi['jml_transaksi'] == isset($saldo['saldo']) && $transaksi['tgl_transaksi'] == $thn . '-01-01') {
+            if (isset($saldo['saldo']) && $transaksi['jml_transaksi'] == $saldo['saldo'] && $transaksi['tgl_transaksi'] == $thn . '-01-01') {
                 $data['data_transaksi'][$i]['action'] = '<button class="btn btn-sm btn-info" disabled><i class="fa fa-ban"></i></button>
                 <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal' . $transaksi['id_transaksi'] . ' "><i class="fas fa-pencil-alt"></i></button>
                 <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#hapusModal' . $transaksi['id_transaksi'] . ' "><i class="fa fa-trash"></i></button>';
@@ -122,17 +125,19 @@ class Transaksi_investasi extends CI_Controller
     {
         $this->db->trans_begin();
         try {
-
-            $jml_transaksi = $this->input->post('jml_transaksi');
-            $no_sertifikat = $this->input->post('sertifikat');
+            $rekening = $this->input->post('rekening', true);
+            $tgl_transaksi = $this->input->post('tgl_transaksi', true);
+            $jml_transaksi = $this->input->post('jml_transaksi', true);
+            $no_sertifikat = $this->input->post('sertifikat', true);
 
             $data = [
-                'no_rekening' => $_POST['rekening'],
+                'no_rekening' => $rekening,
                 'no_sertifikat' => $no_sertifikat,
-                'tgl_transaksi' => $_POST['tgl_transaksi'],
+                'tgl_transaksi' => $tgl_transaksi,
                 'jml_transaksi' => $jml_transaksi,
                 'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $this->session->userdata('user_id'),
+                'created_by' => (string) $this->session->userdata('user_id'),
+                'updated_by' => '',
                 'is_deleted' => 0
             ];
 
@@ -142,54 +147,68 @@ class Transaksi_investasi extends CI_Controller
             }
 
             // $hari = $this->getHari($_POST["tgl_transaksi"]);
-            $thn = date('Y', strtotime($_POST['tgl_transaksi']));
+            $thn = date('Y', strtotime($tgl_transaksi));
             $tgl = date($thn . '-m-d');
             $hari = $this->getHari($tgl);
+            $pembagi_hari = (!empty($hari[1]) && $hari[1] != 0) ? $hari[1] : 1;
 
-            $jml_rata_harian = (float) $_POST["jml_transaksi"] * $hari[0];
+            $jml_rata_harian = (float) $jml_transaksi * $hari[0];
 
             $data_saldo = [
-                'no_rekening' => $_POST['rekening'],
+                'no_rekening' => $rekening,
                 'rata_rata_harian' => $jml_rata_harian,
-                'rata_rata_tahun' => $jml_rata_harian / $hari[1],
-                'tahun' => date('Y', strtotime($_POST['tgl_transaksi'])),
+                'rata_rata_tahun' => $jml_rata_harian / $pembagi_hari,
+                'tahun' => $thn,
                 'created_at' => date('Y-m-d H:i:s'),
-                'created_by' => $this->session->userdata('user_id')
+                'created_by' => (string) $this->session->userdata('user_id')
             ];
-            $cek = $this->TransaksiInvestasi->cekSaldo($_POST['rekening'], $_POST['tgl_transaksi'])->result_array();
+            $cek = $this->TransaksiInvestasi->cekSaldo($rekening, $tgl_transaksi)->result_array();
 
             if (!$cek) {
                 $this->TransaksiInvestasi->tambah('saldo_harian', $data_saldo);
             } else {
-                $rata_harian = $this->update_saldo_user($_POST['rekening'], $tgl,  $thn);
-                $rata_tahun = $rata_harian / $hari[1];
+                $rata_harian = $this->update_saldo_user($rekening, $tgl, $thn);
+                $rata_tahun = $rata_harian / $pembagi_hari;
 
                 $update_saldo = [
                     'rata_rata_harian' => $rata_harian,
                     'rata_rata_tahun' => $rata_tahun,
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => $this->session->userdata('user_id')
+                    'updated_by' => (string) $this->session->userdata('user_id')
                 ];
 
-                $this->TransaksiInvestasi->edit('saldo_harian', $update_saldo, array('no_rekening' => $_POST['rekening'], 'tahun' => $thn));
+                $this->TransaksiInvestasi->edit('saldo_harian', $update_saldo, array('no_rekening' => $rekening, 'tahun' => $thn));
             }
 
             $activity_data = array(
-                'user_id' => $this->session->userdata('user_id'),
+                'user_id' => (string) $this->session->userdata('user_id'),
                 'activity' => 'Tambah Transaksi Berhasil',
                 'times' => date('Y-m-d H:i:s')
             );
 
             $this->TransaksiInvestasi->tambah('activity_log', $activity_data);
 
-            $this->create_qrcode($no_sertifikat);
+            if ($this->db->trans_status() === FALSE) {
+                throw new \Exception('Database transaction failed');
+            }
 
             $this->db->trans_commit();
+
+            if (!empty($no_sertifikat)) {
+                try {
+                    $this->create_qrcode($no_sertifikat);
+                } catch (\Throwable $qrErr) {
+                    // Jangan batalkan transaksi database yang sudah di-commit jika gagal membuat QR image
+                }
+            }
+
+            $this->session->set_flashdata('tahun_transaksi', $thn);
             $this->session->set_flashdata('success', 'Sukses! Data berhasil disimpan.');
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url('transaksi_investasi'));
         } catch (\Throwable $th) {
             $this->db->trans_rollback();
-            redirect($_SERVER['HTTP_REFERER']);
+            $this->session->set_flashdata('error', 'Gagal menyimpan data transaksi: ' . $th->getMessage());
+            redirect(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url('transaksi_investasi'));
         }
     }
 
@@ -214,7 +233,7 @@ class Transaksi_investasi extends CI_Controller
 
             // $hari = $this->getHari($_POST["tgl_transaksi_edt"]);
 
-            $thn = date('Y', strtotime($_POST['tgl_transaksi_hps']));
+            $thn = date('Y', strtotime($_POST['tgl_transaksi_edt']));
             $tgl = date($thn . '-m-d');
             $hari = $this->getHari($tgl);
 
@@ -274,6 +293,8 @@ class Transaksi_investasi extends CI_Controller
                     'updated_at' => date('Y-m-d H:i:s'),
                     'updated_by' => $this->session->userdata('user_id')
                 ];
+
+                $this->TransaksiInvestasi->edit('saldo_harian', $update_saldo, array('no_rekening' => $no_rekening, 'tahun' => $thn));
             }
 
             $activity_data = array(
@@ -385,6 +406,13 @@ class Transaksi_investasi extends CI_Controller
         $data['data_transaksi'] = $this->TransaksiInvestasi->getWhere('transaksi_investasi', ['id_transaksi' => $id_transaksi])->row();
         $data['profiles'] = $this->TransaksiInvestasi->getWhere('client_account', ['no_rekening' => $no_rekening])->row();
 
+        if (!empty($data['data_transaksi']->no_sertifikat)) {
+            $qr_file = FCPATH . 'assets/stisla/images/qrcode/surat_saham/' . $data['data_transaksi']->no_sertifikat . '.png';
+            if (!file_exists($qr_file)) {
+                $this->create_qrcode($data['data_transaksi']->no_sertifikat);
+            }
+        }
+
         $this->load->library('cetak_pdf');
 
         // $this->cetak_pdf->setPaper('A5', 'landscape');
@@ -395,10 +423,40 @@ class Transaksi_investasi extends CI_Controller
         // $this->cetak_pdf->load_view('surat_saham/surat_saham.php', $data);
     }
 
+    public function create_qrcode_penarikan($id)
+    {
+        $this->load->library('ciqrcode');
+
+        $config['cacheable']    = true;
+        $config['cachedir']     = './assets/stisla';
+        $config['errorlog']     = './assets/stisla';
+        $config['imagedir']     = './assets/stisla/images/qrcode/penarikan/';
+        $config['quality']      = true;
+        $config['size']         = '1024';
+        $config['black']        = array(224, 255, 255);
+        $config['white']        = array(70, 130, 180);
+        $this->ciqrcode->initialize($config);
+
+        $image_name = $id . '.png';
+
+        $params['data'] = base_url('penarikan/index/') . $id;
+        $params['level'] = 'H';
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name;
+        $this->ciqrcode->generate($params);
+    }
+
     public function cetak_surat_keterangan($id_penarikan)
     {
         $data['title'] = 'IAA Investment | Surat Keterangan';
         $data['data_penarikan'] = $this->TransaksiInvestasi->getWhere('v_penarikan_investasi', ['id_penarikan' => $id_penarikan])->row();
+
+        if (!empty($data['data_penarikan']->id_penarikan)) {
+            $qr_file = FCPATH . 'assets/stisla/images/qrcode/penarikan/' . $data['data_penarikan']->id_penarikan . '.png';
+            if (!file_exists($qr_file)) {
+                $this->create_qrcode_penarikan($data['data_penarikan']->id_penarikan);
+            }
+        }
 
         $activity_data = array(
             'user_id' => $this->session->userdata('user_id'),

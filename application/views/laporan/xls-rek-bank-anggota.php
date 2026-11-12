@@ -61,8 +61,3 @@ header("Content-Disposition: attachment; filename=rek_bank_anggota.xls");
                 </td>
             </tbody>
         </table>
-    
-        </div>
-        <?php
-        include('script.php'); ?>
-    </div>

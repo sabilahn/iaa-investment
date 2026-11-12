@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'dharmaia_investment',
+	'hostname' => getenv('DB_HOSTNAME') ?: '127.0.0.1',
+	'username' => getenv('DB_USERNAME') ?: 'root',
+	'password' => (getenv('DB_PASSWORD') !== false && getenv('DB_PASSWORD') !== null) ? getenv('DB_PASSWORD') : '',
+	'database' => getenv('DB_DATABASE') ?: 'dharmaia_investment',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

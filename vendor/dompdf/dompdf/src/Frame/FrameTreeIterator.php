@@ -1,4 +1,9 @@
 <?php
+/**
+ * @package dompdf
+ * @link    https://github.com/dompdf/dompdf
+ * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ */
 namespace Dompdf\Frame;
 
 use Iterator;
@@ -9,7 +14,6 @@ use Dompdf\Frame;
  *
  * Returns frames in preorder traversal order (parent then children)
  *
- * @access private
  * @package dompdf
  */
 class FrameTreeIterator implements Iterator
@@ -20,7 +24,7 @@ class FrameTreeIterator implements Iterator
     protected $_root;
 
     /**
-     * @var array
+     * @var Frame[]
      */
     protected $_stack = [];
 
@@ -38,11 +42,7 @@ class FrameTreeIterator implements Iterator
         $this->_num = 0;
     }
 
-    /**
-     *
-     */
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         $this->_stack = [$this->_root];
         $this->_num = 0;
@@ -51,8 +51,7 @@ class FrameTreeIterator implements Iterator
     /**
      * @return bool
      */
-    #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         return count($this->_stack) > 0;
     }
@@ -60,8 +59,7 @@ class FrameTreeIterator implements Iterator
     /**
      * @return int
      */
-    #[\ReturnTypeWillChange]
-    public function key()
+    public function key(): int
     {
         return $this->_num;
     }
@@ -69,22 +67,14 @@ class FrameTreeIterator implements Iterator
     /**
      * @return Frame
      */
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current(): Frame
     {
         return end($this->_stack);
     }
 
-    /**
-     * @return Frame
-     */
-    #[\ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
-        $b = end($this->_stack);
-
-        // Pop last element
-        unset($this->_stack[key($this->_stack)]);
+        $b = array_pop($this->_stack);
         $this->_num++;
 
         // Push all children onto the stack in reverse order
@@ -94,8 +84,5 @@ class FrameTreeIterator implements Iterator
                 $this->_stack[] = $c;
             }
         }
-
-        return $b;
     }
 }
-

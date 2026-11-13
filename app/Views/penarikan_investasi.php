@@ -188,7 +188,7 @@
         $('#penarikanList').DataTable({
             destroy: true,
             "ajax": {
-                "url": "<?= site_url("Penarikan_investasi/getData") ?>" + '/' + tahun,
+                "url": "<?= site_url("penarikan_investasi/getData") ?>" + '/' + tahun,
                 "dataSrc": ""
             },
             "columns": [{
@@ -290,7 +290,7 @@
         $.ajax({
             type: 'POST',
             data: 'id_penarikan=' + id_penarikan,
-            url: '<?= base_url() ?>Penarikan_investasi/getDataID',
+            url: '<?= base_url() ?>penarikan_investasi/getDataID',
             dataType: 'json',
             success: function(data) {
                 // console.log(data);
@@ -310,7 +310,7 @@
         $.ajax({
             type: 'POST',
             data: 'id_penarikan=' + id_penarikan + '&no_rekening=' + no_rekening + '&tgl_penarikan=' + tgl_penarikan,
-            url: '<?= base_url() ?>Penarikan_investasi/update',
+            url: '<?= base_url() ?>penarikan_investasi/update',
             dataType: 'json',
             success: function(data) {
                 $('#editModal').modal('hide');
@@ -331,7 +331,7 @@
         $.ajax({
             type: 'POST',
             data: 'id_penarikan=' + id_penarikan,
-            url: '<?= base_url() ?>Penarikan_investasi/getDataID',
+            url: '<?= base_url() ?>penarikan_investasi/getDataID',
             dataType: 'json',
             success: function(data) {
                 // console.log(data);
@@ -351,7 +351,7 @@
         $.ajax({
             type: 'POST',
             data: 'id_penarikan=' + id_penarikan + '&no_rekening=' + no_rekening + '&tgl_penarikan=' + tgl_penarikan,
-            url: '<?= base_url() ?>Penarikan_investasi/delete',
+            url: '<?= base_url() ?>penarikan_investasi/delete',
             dataType: 'json',
             success: function(data) {
                 $('#hapusModal').modal('hide');

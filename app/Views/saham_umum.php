@@ -105,7 +105,7 @@
             $('#penarikanList').DataTable({
             destroy: true,
             "ajax": {
-                "url": "<?= site_url("Saham_umum/getData") ?>" + '/' + tahun,
+                "url": "<?= site_url("saham_umum/getData") ?>" + '/' + tahun,
                 "dataSrc": ""
             },
             "columns": [{
@@ -158,7 +158,7 @@
         $.ajax({
             type: 'POST',
             data: 'no_rekening=' + no_rekening + '&tahun=' + tahun,
-            url: '<?= base_url() ?>Saham_umum/getDataID',
+            url: '<?= base_url() ?>saham_umum/getDataID',
             dataType: 'json',
             success: function(data) {
                 var html = '';

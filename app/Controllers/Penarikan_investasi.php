@@ -102,70 +102,149 @@ class Penarikan_investasi extends BaseController
 
     public function tambah_data_penarikan()
     {
-        $noRekening   = (string) $this->request->getPost('no_rekening');
-        $tglPenarikan = (string) $this->request->getPost('tgl_penarikan');
+        $noRekening   = trim((string) $this->request->getPost('no_rekening'));
+        $tglPenarikan = trim((string) $this->request->getPost('tgl_penarikan'));
         $jmlPenarikan = $this->parseNominal($this->request->getPost('jml_penarikan'));
 
-        $data = [
-            'no_rekening'   => $noRekening,
-            'tgl_penarikan' => $tglPenarikan,
-            'jml_penarikan' => $jmlPenarikan,
-            'created_at'    => date('Y-m-d H:i:s'),
-            'created_by'    => $this->session->get('user_id'),
-        ];
+        if ($noRekening === '' || $tglPenarikan === '' || $jmlPenarikan === null || (float) $jmlPenarikan <= 0) {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Pastikan rekening, tanggal, dan jumlah penarikan terisi dengan benar.',
+            ]);
+        }
 
-        $id = $this->transaksiInvestasi->tambah_id('penarikan_investasi', $data);
-        $this->transaksiInvestasi->tambah('activity_log', [
-            'user_id'  => $this->session->get('user_id'),
-            'activity' => 'Tambah Penarikan Transaksi Berhasil',
-            'times'    => date('Y-m-d H:i:s'),
-        ]);
+        try {
+            $data = [
+                'no_rekening'   => $noRekening,
+                'tgl_penarikan' => $tglPenarikan,
+                'jml_penarikan' => $jmlPenarikan,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'created_by'    => $this->session->get('user_id'),
+            ];
 
-        $this->recalculateSaldo($noRekening, $tglPenarikan);
-        $this->create_qrcode($id);
+            $id = $this->transaksiInvestasi->tambah_id('penarikan_investasi', $data);
+            if (! $id) {
+                return $this->response->setJSON([
+                    'status'  => false,
+                    'message' => 'Gagal! Data penarikan gagal disimpan.',
+                ]);
+            }
 
-        return $this->response->setJSON('');
+            $this->transaksiInvestasi->tambah('activity_log', [
+                'user_id'  => $this->session->get('user_id'),
+                'activity' => 'Tambah Penarikan Transaksi Berhasil',
+                'times'    => date('Y-m-d H:i:s'),
+            ]);
+
+            $this->recalculateSaldo($noRekening, $tglPenarikan);
+            $this->create_qrcode($id);
+
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Sukses! Data berhasil disimpan.',
+            ]);
+        } catch (\Throwable $e) {
+            log_message('error', 'Gagal tambah_data_penarikan: {message}', ['message' => $e->getMessage()]);
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Terjadi kesalahan saat menyimpan data.',
+            ]);
+        }
     }
 
     public function update()
     {
-        $idPenarikan  = $this->request->getPost('id_penarikan');
-        $tglPenarikan = (string) $this->request->getPost('tgl_penarikan');
-        $noRekening   = (string) $this->request->getPost('no_rekening');
+        $idPenarikan  = trim((string) $this->request->getPost('id_penarikan'));
+        $tglPenarikan = trim((string) $this->request->getPost('tgl_penarikan'));
+        $noRekening   = trim((string) $this->request->getPost('no_rekening'));
 
-        $this->transaksiInvestasi->edit('penarikan_investasi', [
-            'tgl_penarikan' => $tglPenarikan,
-            'updated_at'    => date('Y-m-d H:i:s'),
-            'updated_by'    => $this->session->get('user_id'),
-        ], ['id_penarikan' => $idPenarikan]);
+        if ($idPenarikan === '' || $tglPenarikan === '' || $noRekening === '') {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Pastikan tanggal penarikan terisi dengan benar.',
+            ]);
+        }
 
-        $this->transaksiInvestasi->tambah('activity_log', [
-            'user_id'  => $this->session->get('user_id'),
-            'activity' => 'Ubah Penarikan Transaksi Berhasil',
-            'times'    => date('Y-m-d H:i:s'),
-        ]);
+        try {
+            $updated = $this->transaksiInvestasi->edit('penarikan_investasi', [
+                'tgl_penarikan' => $tglPenarikan,
+                'updated_at'    => date('Y-m-d H:i:s'),
+                'updated_by'    => $this->session->get('user_id'),
+            ], ['id_penarikan' => $idPenarikan]);
 
-        $this->recalculateSaldo($noRekening, $tglPenarikan);
+            if (! $updated) {
+                return $this->response->setJSON([
+                    'status'  => false,
+                    'message' => 'Gagal! Data penarikan gagal diperbarui.',
+                ]);
+            }
 
-        return $this->response->setJSON($tglPenarikan);
+            $this->transaksiInvestasi->tambah('activity_log', [
+                'user_id'  => $this->session->get('user_id'),
+                'activity' => 'Ubah Penarikan Transaksi Berhasil',
+                'times'    => date('Y-m-d H:i:s'),
+            ]);
+
+            $this->recalculateSaldo($noRekening, $tglPenarikan);
+
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Sukses! Data berhasil diperbarui.',
+            ]);
+        } catch (\Throwable $e) {
+            log_message('error', 'Gagal update penarikan: {message}', ['message' => $e->getMessage()]);
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Terjadi kesalahan saat memperbarui data.',
+            ]);
+        }
     }
 
     public function delete()
     {
-        $idPenarikan  = $this->request->getPost('id_penarikan');
-        $noRekening   = (string) $this->request->getPost('no_rekening');
-        $tglPenarikan = (string) $this->request->getPost('tgl_penarikan');
+        $idPenarikan  = trim((string) $this->request->getPost('id_penarikan'));
+        $noRekening   = trim((string) $this->request->getPost('no_rekening'));
+        $tglPenarikan = trim((string) $this->request->getPost('tgl_penarikan'));
 
-        $this->transaksiInvestasi->hapus('penarikan_investasi', ['id_penarikan' => $idPenarikan]);
-        $this->transaksiInvestasi->tambah('activity_log', [
-            'user_id'  => $this->session->get('user_id'),
-            'activity' => 'Hapus Penarikan Transaksi Berhasil',
-            'times'    => date('Y-m-d H:i:s'),
-        ]);
+        if ($idPenarikan === '' || $noRekening === '' || $tglPenarikan === '') {
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Data penarikan tidak valid.',
+            ]);
+        }
 
-        $this->recalculateSaldo($noRekening, $tglPenarikan);
+        try {
+            $deleted = $this->transaksiInvestasi->hapus('penarikan_investasi', ['id_penarikan' => $idPenarikan]);
 
-        return $this->response->setJSON('');
+            if (! $deleted) {
+                return $this->response->setJSON([
+                    'status'  => false,
+                    'message' => 'Gagal! Data penarikan gagal dihapus.',
+                ]);
+            }
+
+            $this->transaksiInvestasi->tambah('activity_log', [
+                'user_id'  => $this->session->get('user_id'),
+                'activity' => 'Hapus Penarikan Transaksi Berhasil',
+                'times'    => date('Y-m-d H:i:s'),
+            ]);
+
+            $this->recalculateSaldo($noRekening, $tglPenarikan);
+
+            return $this->response->setJSON([
+                'status'  => true,
+                'message' => 'Sukses! Data berhasil dihapus.',
+            ]);
+        } catch (\Throwable $e) {
+            log_message('error', 'Gagal delete penarikan: {message}', ['message' => $e->getMessage()]);
+
+            return $this->response->setJSON([
+                'status'  => false,
+                'message' => 'Gagal! Terjadi kesalahan saat menghapus data.',
+            ]);
+        }
     }
 
     public function getJumlah()

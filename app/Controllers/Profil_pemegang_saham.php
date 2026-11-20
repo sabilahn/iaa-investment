@@ -96,16 +96,18 @@ class Profil_pemegang_saham extends BaseController
                     'activity' => 'Tambah Data Anggota Berhasil',
                     'times'    => date('Y-m-d H:i:s'),
                 ]);
-            } else {
-                $this->session->setFlashdata('error', 'Gagal! No rekening sudah ada.');
+
+                return redirect()->to(base_url('profil_pemegang_saham'));
             }
 
-            return redirect()->to(base_url('profil_pemegang_saham'));
+            $this->session->setFlashdata('error', 'Gagal! No rekening sudah ada.');
+
+            return redirect()->to(base_url('profil_pemegang_saham/tambah_data_anggota'))->withInput();
         }
 
         $this->session->setFlashdata('error', 'Gagal! Pastikan input anda benar!');
 
-        return redirect()->to(base_url('profil_pemegang_saham'));
+        return redirect()->to(base_url('profil_pemegang_saham/tambah_data_anggota'))->withInput();
     }
 
     public function ubah_data_anggota($noRekening)

@@ -27,15 +27,15 @@
                         <div class="col-12 col-md-4 col-lg-4">
                             <div class="form-group mb-0">
                                 <label>No. Rekening <font color='#ff0000'> *</font></label>
-                                <input type="text" name="rekening" id="rekening" class="form-control" placeholder="0000-0000">
+                                <input type="text" name="rekening" id="rekening" class="form-control" placeholder="0000-0000" value="<?= esc(old('rekening')) ?>" required>
                             </div>
                             <div class="form-group mb-0">
                                 <label>NIK</label>
-                                <input type="number" name="nik" id="nik" class="form-control">
+                                <input type="number" name="nik" id="nik" class="form-control" value="<?= esc(old('nik')) ?>">
                             </div>
                             <div class="form-group mb-0">
                                 <label>Nama <font color='#ff0000'> *</font></label>
-                                <input type="text" name="nama" id="nama" class="form-control">
+                                <input type="text" name="nama" id="nama" class="form-control" value="<?= esc(old('nama')) ?>" required>
                             </div>
                             <div class="form-group mb-0">
                                 <label>Tempat & Tanggal Lahir</label>

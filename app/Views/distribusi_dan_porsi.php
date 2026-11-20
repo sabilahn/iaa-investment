@@ -96,7 +96,7 @@
             <div class="collapse show" id="showDana">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped" id="table-2">
+                        <table class="table table-striped" id="table-distribusi-2">
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
@@ -137,3 +137,13 @@
         </div>
     </section>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#table-distribusi-2').DataTable({
+            "columnDefs": [
+                { "sortable": false, "targets": [2, 3] }
+            ]
+        });
+    });
+</script>

@@ -102,24 +102,26 @@ $base64qr = 'data:image/png' . ';base64,' . $base64Image2;
         <p style="margin-left: 114px; margin-right: 114px; margin-top: 3px; text-align: justify;">IAA Sumenep Jawa Timur sebesar Rp. <?= number_format((float) $data_penarikan->jml_penarikan, 2, ',', '.'); ?></p>
         <p style="margin-left: 114px; margin-right: 114px; margin-top: 20px; text-align: justify;">Demikian keterangan ini saya buat dengan sadar tanpa ada unsur paksaan dari pihak manapun.</p>
 
-        <table style="margin-left: 114px; margin-right: 114px; margin-top: 20px;" width=100%;>
-            <tr>
-                <td></td>
-                <td class="font-16 text-right">Sumenep, <?= date('d-m-Y') ?></td>
-            </tr>
-            <tr>
-                <td class="font-16 text-center" style="width: 50%; padding-top:15px;">Direktur CV. Dharma IAA,</td>
-                <td class="font-16 text-center" style="width: 50%; padding-top:15px;">Saya,</td>
-            </tr>
-            <tr>
-                <td style="height:50px; text-align:center;"><img src="<?= $base64qr ?>" style="width:15%; margin-top: 5px;"></td>
-                <td style="text-align:center;"><img src="<?= $base64qr ?>" style="width:15%; margin-top: 5px;"></td>
-            </tr>
-            <tr>
-                <td class="font-16 text-center">A. Kurdy Khan</td>
-                <td class="font-16 text-center"><?= ucwords($data_penarikan->nama) ?></td>
-            </tr>
-        </table>
+        <div style="margin-left: 114px; margin-right: 114px; margin-top: 20px;">
+            <table style="width: 100%;">
+                <tr>
+                    <td></td>
+                    <td class="font-16 text-right">Sumenep, <?= date('d-m-Y') ?></td>
+                </tr>
+                <tr>
+                    <td class="font-16 text-center" style="width: 50%; padding-top:15px;">Direktur CV. Dharma IAA,</td>
+                    <td class="font-16 text-center" style="width: 50%; padding-top:15px;">Saya,</td>
+                </tr>
+                <tr>
+                    <td style="height:50px; text-align:center;"><img src="<?= $base64qr ?>" style="width:40%; margin-top: 5px; margin-bottom: 5px;"></td>
+                    <td style="text-align:center;"><img src="<?= $base64qr ?>" style="width:40%; margin-top: 5px; margin-bottom: 5px;"></td>
+                </tr>
+                <tr>
+                    <td class="font-16 text-center">A. Kurdy Khan</td>
+                    <td class="font-16 text-center"><?= ucwords($data_penarikan->nama) ?></td>
+                </tr>
+            </table>
+        </div>
 </body>
 
 </html>

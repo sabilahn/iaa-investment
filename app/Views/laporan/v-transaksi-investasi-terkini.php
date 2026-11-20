@@ -1,5 +1,5 @@
 <p></p>
-<h2> TRANSAKSI INVESTASI TAHUN BUKU <?= date('Y') ?> <br> CV. DHARMA IAA S/D <?= date('d') . ' ' . $nama_bulan . ' ' . date('Y') ?></h2>
+<h2> TRANSAKSI INVESTASI TAHUN BUKU <?= date('Y') ?> <br> CV. DHARMA IAA S/D <?= date('d') . ' ' . strtoupper((string) $nama_bulan) . ' ' . date('Y') ?></h2>
 <p></p>
 <table border="1">
     <thead>

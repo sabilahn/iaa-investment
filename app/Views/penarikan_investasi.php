@@ -114,7 +114,7 @@
                     </div>
                     <div class="form-group mb-0">
                         <label>Jumlah Penarikan</label>
-                        <input type="text" inputmode="decimal" name="jml_penarikan" id="jml_penarikan" class="form-control currency-input" disabled>
+                        <input type="text" inputmode="decimal" name="jml_penarikan" id="jml_penarikan" class="form-control currency-input">
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
@@ -232,12 +232,24 @@
         });
     }
 
-    $('select').on('change', function() {
+    function showAlert(type, message) {
+        var alertClass = (type === 'success') ? 'alert-success' : 'alert-danger';
+        var html = '<div class="alert ' + alertClass + ' alert-dismissible show fade">' +
+            '<div class="alert-body text-center">' +
+            '<button class="close" data-dismiss="alert">' +
+            '<span>&times;</span></button>' +
+            '<b>' + message + '</b></div></div>';
+
+        $('#error-message').html(html);
+        initAutoDismissAlerts();
+    }
+
+    $('#rekening').on('change', function() {
         getJumlah(this.value);
     });
 
     function get_data() {
-        var tahun = $('#tahun').val();
+        tahun = $('#tahun').val();
 
         show_data(tahun);
     }
@@ -245,7 +257,7 @@
     function getJumlah(rekening) {
         $.ajax({
             type: 'POST',
-            data: 'rekening=' + rekening,
+            data: { rekening: rekening },
             url: '<?= base_url() ?>penarikan_investasi/getJumlah',
             dataType: 'json',
             success: function(data) {
@@ -267,21 +279,28 @@
 
         $.ajax({
             type: 'POST',
-            data: 'no_rekening=' + no_rekening + '&tgl_penarikan=' + tgl_penarikan + '&jml_penarikan=' + jml_penarikan,
+            data: {
+                no_rekening: no_rekening,
+                tgl_penarikan: tgl_penarikan,
+                jml_penarikan: jml_penarikan
+            },
             url: '<?= base_url() ?>penarikan_investasi/tambah_data_penarikan',
             dataType: 'json',
             success: function(data) {
-                show_data(tahun);
-
-                var html = '<div class="alert alert-success alert-dismissible show fade">' +
-                    '<div class="alert-body text-center">' +
-                    '<button class="close" data-dismiss="alert">' +
-                    '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil disimpan</b></div></div>';
-
                 $('#tambahModal').modal('hide');
-                $('#error-message').html(html);
-
+                if (data && data.status) {
+                    $('#rekening').prop('selectedIndex', 0).trigger('change.select2');
+                    $('#tgl_penarikan').val('');
+                    $('#jml_penarikan').val('');
+                    show_data($('#tahun').val() || tahun);
+                    showAlert('success', data.message || 'Sukses! Data berhasil disimpan.');
+                } else {
+                    showAlert('error', (data && data.message) ? data.message : 'Gagal! Data gagal disimpan.');
+                }
+            },
+            error: function() {
+                $('#tambahModal').modal('hide');
+                showAlert('error', 'Gagal! Terjadi kesalahan saat menyimpan data.');
             }
         });
     }
@@ -289,11 +308,14 @@
     function edit(id_penarikan, no_rekening) {
         $.ajax({
             type: 'POST',
-            data: 'id_penarikan=' + id_penarikan,
+            data: { id_penarikan: id_penarikan },
             url: '<?= base_url() ?>penarikan_investasi/getDataID',
             dataType: 'json',
             success: function(data) {
-                // console.log(data);
+                if (!data || data.length === 0) {
+                    showAlert('error', 'Gagal! Data penarikan tidak ditemukan.');
+                    return;
+                }
                 for (var i = 0; i < data.length; i++) {
                     document.getElementById('tgl_penarikan_edt').value = data[i].tgl_penarikan;
                 }
@@ -301,6 +323,9 @@
                     '<button onclick="update(' + id_penarikan + ',' + "'" + no_rekening + "'" + ')" class="btn btn-primary">Perbarui</button>';
                 $('#editBtn').html(rowBtn);
                 $('#editModal').modal('show');
+            },
+            error: function() {
+                showAlert('error', 'Gagal! Tidak dapat memuat data penarikan.');
             }
         });
     }
@@ -309,20 +334,25 @@
         var tgl_penarikan = $("#tgl_penarikan_edt").val();
         $.ajax({
             type: 'POST',
-            data: 'id_penarikan=' + id_penarikan + '&no_rekening=' + no_rekening + '&tgl_penarikan=' + tgl_penarikan,
+            data: {
+                id_penarikan: id_penarikan,
+                no_rekening: no_rekening,
+                tgl_penarikan: tgl_penarikan
+            },
             url: '<?= base_url() ?>penarikan_investasi/update',
             dataType: 'json',
             success: function(data) {
                 $('#editModal').modal('hide');
-                show_data(tahun);
-
-                var html = '<div class="alert alert-success alert-dismissible show fade">' +
-                    '<div class="alert-body text-center">' +
-                    '<button class="close" data-dismiss="alert">' +
-                    '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil disimpan</b></div></div>';
-
-                $('#error-message').html(html);
+                if (data && data.status) {
+                    show_data($('#tahun').val() || tahun);
+                    showAlert('success', data.message || 'Sukses! Data berhasil diperbarui.');
+                } else {
+                    showAlert('error', (data && data.message) ? data.message : 'Gagal! Data gagal diperbarui.');
+                }
+            },
+            error: function() {
+                $('#editModal').modal('hide');
+                showAlert('error', 'Gagal! Terjadi kesalahan saat memperbarui data.');
             }
         });
     }
@@ -330,11 +360,14 @@
     function del(id_penarikan, no_rekening) {
         $.ajax({
             type: 'POST',
-            data: 'id_penarikan=' + id_penarikan,
+            data: { id_penarikan: id_penarikan },
             url: '<?= base_url() ?>penarikan_investasi/getDataID',
             dataType: 'json',
             success: function(data) {
-                // console.log(data);
+                if (!data || data.length === 0) {
+                    showAlert('error', 'Gagal! Data penarikan tidak ditemukan.');
+                    return;
+                }
                 var tgl_penarikan = '';
                 for (var i = 0; i < data.length; i++) {
                     tgl_penarikan = data[i].tgl_penarikan;
@@ -343,6 +376,9 @@
                     '<button onclick="delete_id(' + id_penarikan + ',' + "'" + no_rekening + "'" + ',' + "'" + tgl_penarikan + "'" + ')" class="btn btn-danger">Hapus</button>';
                 $("#hapusBtn").html(html);
                 $('#hapusModal').modal('show');
+            },
+            error: function() {
+                showAlert('error', 'Gagal! Tidak dapat memuat data penarikan.');
             }
         });
     }
@@ -350,20 +386,25 @@
     function delete_id(id_penarikan, no_rekening, tgl_penarikan) {
         $.ajax({
             type: 'POST',
-            data: 'id_penarikan=' + id_penarikan + '&no_rekening=' + no_rekening + '&tgl_penarikan=' + tgl_penarikan,
+            data: {
+                id_penarikan: id_penarikan,
+                no_rekening: no_rekening,
+                tgl_penarikan: tgl_penarikan
+            },
             url: '<?= base_url() ?>penarikan_investasi/delete',
             dataType: 'json',
             success: function(data) {
                 $('#hapusModal').modal('hide');
-                show_data(tahun);
-
-                var html = '<div class="alert alert-success alert-dismissible show fade">' +
-                    '<div class="alert-body text-center">' +
-                    '<button class="close" data-dismiss="alert">' +
-                    '<span>&times;</span></button>' +
-                    '<b>Sukses! Data berhasil dihapus</b></div></div>';
-
-                $('#error-message').html(html);
+                if (data && data.status) {
+                    show_data($('#tahun').val() || tahun);
+                    showAlert('success', data.message || 'Sukses! Data berhasil dihapus.');
+                } else {
+                    showAlert('error', (data && data.message) ? data.message : 'Gagal! Data gagal dihapus.');
+                }
+            },
+            error: function() {
+                $('#hapusModal').modal('hide');
+                showAlert('error', 'Gagal! Terjadi kesalahan saat menghapus data.');
             }
         });
     }

@@ -38,8 +38,12 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 }
 
 if (! isset($_SERVER['CI_ENVIRONMENT']) && ! isset($_ENV['CI_ENVIRONMENT'])) {
-    $_SERVER['CI_ENVIRONMENT'] = 'development';
-    $_ENV['CI_ENVIRONMENT']    = 'development';
+    $host    = $_SERVER['HTTP_HOST'] ?? '';
+    $isLocal = str_contains($host, 'localhost') || str_starts_with($host, '127.0.0.1');
+    $env     = $isLocal ? 'development' : 'production';
+
+    $_SERVER['CI_ENVIRONMENT'] = $env;
+    $_ENV['CI_ENVIRONMENT']    = $env;
 }
 
 /*
